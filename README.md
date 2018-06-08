@@ -73,7 +73,7 @@ All tree elements provide, apart from `:select` and `()`, the following accessor
 - `.classes` an array with the classes listed in element's class attribute; `{}` if none
 - `:getcontent()` the raw text between the opening and closing tags of the element; `""` if none
 - `.nodes` an array with the element's child elements, `{}` if none
-- `.parent` the elements that contains this element; `root.parent` is `nil`
+- `.parent` the element that contains this element; `root.parent` is `nil`
 
 ###Other
 - `.index` sequence number of elements in order of appearance; root index is `0`
@@ -81,13 +81,13 @@ All tree elements provide, apart from `:select` and `()`, the following accessor
 - `.level` how deep the element is in the tree; root level is `0`
 - `.root` the root element of the tree; `root.root` is `root`
 - `.deepernodes` a [Set][1] containing all elements in the tree beneath this element, including this element's `.nodes`; `{}` if none
-- `.deeperelements` a table with a key for each distinct tagname in `.deepernodes`, containing a [Set][1] of all deeper element nodes with that name; `{}` in none
+- `.deeperelements` a table with a key for each distinct tagname in `.deepernodes`, containing a [Set][1] of all deeper element nodes with that name; `{}` if none
 - `.deeperattributes` as `.deeperelements`, but keyed on attribute name
 - `.deeperids` as `.deeperelements`, but keyed on id value
 - `.deeperclasses` as `.deeperelements`, but keyed on class name
 
 ##Limitations
-- Attribute values in selector strings cannot contain any spaces, nor any of `#`, `.`, `[`, `]`, `:`, `(`, or `)`
+- Attribute values in selector strings cannot contain any spaces, nor any of `#`, `[`, `]`, `:`, `(`, or `)`
 - The spaces before and after the `>` in a `parent > child` relation are mandatory 
 - `<!` elements (including doctype, comments, and CDATA) are not parsed; markup within CDATA is *not* escaped
 - Textnodes are no separate tree elements; in `local root = htmlparser.parse("<p>line1<br />line2</p>")`, `root.nodes[1]:getcontent()` is `"line1<br />line2"`, while `root.nodes[1].nodes[1].name` is `"br"`
