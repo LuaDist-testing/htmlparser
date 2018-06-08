@@ -12,7 +12,7 @@ MIT; see `./doc/LICENSE`
 Htmlparser is a listed [LuaRock](http://luarocks.org/repositories/rocks/). Install using [LuaRocks](http://www.luarocks.org/): `luarocks install htmlparser`
 
 ###Dependencies
-Htmlparser depends on [Lua 5.2](http://www.lua.org/download.html), and on the ["set"][1] LuaRock, which is installed along automatically
+Htmlparser depends on [Lua 5.2](http://www.lua.org/download.html), and on the ["set"][1] LuaRock, which is installed along automatically. To be able to run the tests, [lunitx](https://github.com/dcurrie/lunit) also comes along as a LuaRock
 
 ##Usage
 Start off with
@@ -68,12 +68,18 @@ Selectors can be combined; e.g. `".class:not([attribute]) element.class"`
 
 ###Limitations
 - Attribute values in selectors currently cannot contain any spaces, since space is interpreted as a delimiter between the `ancestor` and `descendant`, `parent` and `>`, or `>` and `child` parts of the selector
-- Likewise, for the `parent > child` relation, the spaces before and after the `>` are mandatory
-- `<!` elements are not parsed, including doctype and comments
+- Consequently, for the `parent > child` relation, the spaces before and after the `>` are mandatory
+- Attribute values in selectors currently also cannot contain any of `#`, `.`, `[`, `]`, `:`, `(`, or `)`
+- `<!` elements are not parsed, including doctype, comments, and CDATA
 - Textnodes are not seperate entries in the tree, so the content of `<p>line1<br />line2</p>` is plainly `"line1<br />line2"`
+- All start and end tags should be explicitly specified in the text to be parsed; omitted tags (as [permitted](http://www.w3.org/TR/html5/syntax.html#optional-tags) by the the HTML spec) are NOT implied. Only the [void](http://www.w3.org/TR/html5/syntax.html#void-elements) elements naturally don't need (and mustn't have) an end tag
+- The HTML text is not validated in any way; tag and attribute names and the nesting of different tags is completely arbitrary. The only HTML-specific part of the parser is that it knows which tags are void elements
 
 ##Examples
-See `./doc/samples.lua`
+See `./doc/sample.lua`
+
+##Tests
+See `./tst/init.lua`
 
 ##Element type
 All tree elements provide, apart from `:select` and `()`, the following accessors:
