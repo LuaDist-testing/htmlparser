@@ -1,9 +1,27 @@
-require("luarocks.loader")
+-- vim: ft=lua ts=2 sw=2
 -- Omit next line in actual module clients; it's only to support development of the module itself
 package.path = "../src/?.lua;" .. package.path
 
-local lunitx = require("lunitx")
-module("html", lunitx.testcase, package.seeall)
+pcall(require, "luacov")
+
+print("------------------------------------")
+print("Lua version: " .. (jit and jit.version or _VERSION))
+print("------------------------------------")
+print("")
+
+local HAS_RUNNER = not not lunit
+local lunitx
+if not HAS_RUNNER then
+	lunitx = require"lunitx"
+else
+	lunitx = require"lunit"
+end
+local TEST_CASE = lunitx.TEST_CASE
+
+local LUA_VER = _VERSION
+local unpack, pow, bit32 = unpack, math.pow, bit32
+
+local _ENV = TEST_CASE"html"
 
 local htmlparser = require("htmlparser")
 
@@ -276,4 +294,35 @@ function test_order()
   for i,v in pairs(notn) do
     assert_equal(i, tonumber(v.name), "notn order")
   end
+end
+
+function test_tagnames_with_hyphens()
+	local tree = htmlparser.parse([[
+		<tag-name id="9999">
+			<m id="10000"></m>
+		</tag-name>
+	]])
+	assert_equal(1, #tree.nodes, "top level")
+	assert_equal("tag-name", tree("#9999")[1].name, "#9999")
+	assert_equal("m", tree("#10000")[1].name, "#10000")
+end
+
+function test_loop_limit()
+	local tree = htmlparser.parse([[
+		<a id='1>2'>moo</a>
+		<a id='2>3'>moo</a>
+		<b id='foo<bar'>moo</b>
+		<img <%tpl%> foo=bar></img>
+		<img <%tpl%> />
+		<img <%tpl%>></img>
+		<img <%tpl%>/>
+		<i <=moo=>>k</i>
+		<s <-foo->>o</s>
+		<div <*bar*>></div>
+		<p>
+			<a id="unclosed>Element"> with unclosed attribute</a>
+		</p>
+		<div data-pic="aa<%=image_url%>bb" ></div>
+	]]) -- issue#42
+	assert(1==1)
 end

@@ -1,28 +1,20 @@
--- This file was automatically generated for the LuaDist project.
-
 package = "htmlparser"
-version = "0.3.2-1"
--- LuaDist source
+version = "0.3.2-2"
 source = {
-  tag = "0.3.2-1",
-  url = "git://github.com/LuaDist-testing/htmlparser.git"
+  url = "https://github.com/msva/lua-htmlparser",
+  branch = "v0.3.2"
 }
--- Original source
--- source = {
---   url = "git://github.com/wscherphof/lua-htmlparser.git",
---   branch = "v0.3.2"
--- }
 description = {
   summary = "Parse HTML text into a tree of elements with selectors",
   detailed = [[
     Call parse() to build up a tree of element nodes. Each node in the tree, including the root node that is returned by parse(), supports a basic set of jQuery-like selectors. Or you could walk the tree by hand.
   ]],
-  homepage = "http://wscherphof.github.io/lua-htmlparser/",
+  homepage = "http://msva.github.io/lua-htmlparser/",
   license = "LGPL+"
 }
 dependencies = {
-  "lua >= 5.2",
-  "set >= 0.2",
+  "lua >= 5.1",
+  "set >= 0.2.1-2",
   "lunitx >= 0.6"
 }
 build = {
